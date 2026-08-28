@@ -42,7 +42,7 @@ export type CategoryId = 'finance' | 'labor' | 'realestate' | 'life';
 
 export const CATEGORIES: { id: CategoryId; label: string; blurb: string }[] = [
   { id: 'finance', label: '금융', blurb: '대출·이자·투자' },
-  { id: 'labor', label: '노무', blurb: '급여·퇴직금·수당' },
+  { id: 'labor', label: '직장', blurb: '급여·퇴직금·수당' },
   { id: 'realestate', label: '부동산', blurb: '취득세·중개보수' },
   { id: 'life', label: '생활', blurb: '날짜·단위·요금' },
 ];
