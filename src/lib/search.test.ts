@@ -9,6 +9,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { search, toJamo, toChoseong, isChoseongQuery, normalize } from './search.ts';
+import { isGame, isOpenable } from './site.ts';
 
 const top = (query: string) => search(query)[0]?.meta.slug;
 const slugs = (query: string) => search(query).map((hit) => hit.meta.slug);
@@ -102,14 +103,41 @@ test('제목보다 별칭이, 별칭보다 요약이 낮게 잡힌다', () => {
   }
 });
 
-test('같은 점수면 실제로 쓸 수 있는 계산기를 먼저 보여준다', () => {
+test('같은 점수면 실제로 열 수 있는 것을 먼저 보여준다', () => {
   const results = search('계산기');
-  const liveIndex = results.findIndex((hit) => hit.meta.status === 'live');
-  const plannedIndex = results.findIndex((hit) => hit.meta.status === 'planned');
-  if (liveIndex !== -1 && plannedIndex !== -1) {
-    const live = results[liveIndex];
-    const planned = results[plannedIndex];
-    if (live.score === planned.score) assert.ok(liveIndex < plannedIndex);
+  const openIndex = results.findIndex((hit) => isOpenable(hit.meta));
+  const soonIndex = results.findIndex((hit) => !isOpenable(hit.meta));
+  if (openIndex !== -1 && soonIndex !== -1) {
+    const open = results[openIndex];
+    const soon = results[soonIndex];
+    if (open.score === soon.score) assert.ok(openIndex < soonIndex);
+  }
+});
+
+test('게임도 같은 검색창에서 찾을 수 있다', () => {
+  // 게임 탭을 모르고 그냥 검색창에 치는 사람이 있다
+  assert.equal(top('비행기'), 'flying-airplane');
+  assert.equal(top('종이비행기'), 'flying-airplane');
+  assert.ok(slugs('게임').includes('flying-airplane'));
+  // 흔한 오표기도 별칭으로 넣어둔다
+  assert.ok(slugs('떳다비행기').includes('flying-airplane'));
+});
+
+test('게임은 외부 주소를 가지고 항상 열 수 있다', () => {
+  const hit = search('비행기')[0];
+  assert.ok(hit && isGame(hit.meta));
+  const game = hit.meta;
+  assert.ok(isGame(game) && game.url.startsWith('https://'));
+  assert.equal(isOpenable(hit.meta), true);
+});
+
+test('계산기 검색에 게임이 끼어들지 않는다', () => {
+  // 색인을 합치면서 오탐이 생기면 계산기 검색이 상한다
+  for (const query of ['대출', '연봉', '복비', '퇴직금', 'DSR']) {
+    assert.ok(
+      !slugs(query).includes('flying-airplane'),
+      `"${query}" 검색에 게임이 나왔다`,
+    );
   }
 });
 

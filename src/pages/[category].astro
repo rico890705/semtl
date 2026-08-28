@@ -3,9 +3,14 @@ import Base from '../layouts/Base.astro';
 import CalculatorGrid from '../components/CalculatorGrid.astro';
 import { CATEGORIES, calculatorsIn, type CategoryId } from '../lib/site';
 
-/** 분류 페이지는 빌드 시점에 전부 만들어진다 — 서버가 필요 없다. */
+/**
+ * 분류 페이지는 빌드 시점에 전부 만들어진다 — 서버가 필요 없다.
+ *
+ * 게임만 제외한다. 내용물이 계산기가 아니라 외부 링크고
+ * 제목도 "게임 계산기"가 되어버려서, /game 은 전용 페이지로 따로 둔다.
+ */
 export function getStaticPaths() {
-  return CATEGORIES.map((c) => ({
+  return CATEGORIES.filter((c) => c.id !== 'game').map((c) => ({
     params: { category: c.id },
     props: { category: c },
   }));

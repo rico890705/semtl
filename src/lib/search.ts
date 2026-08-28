@@ -14,7 +14,7 @@
  * 서버가 없으므로 전부 브라우저에서 돈다. 계산기가 수백 개가 되어도
  * 인덱스는 수십 KB 수준이라 이 방식으로 충분하다.
  */
-import { CALCULATORS, CATEGORIES, type CalculatorMeta } from './site.ts';
+import { CALCULATORS, CATEGORIES, GAMES, isOpenable, type Listing } from './site.ts';
 
 const CHO = [
   'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ',
@@ -92,7 +92,7 @@ interface IndexField {
 }
 
 interface IndexEntry {
-  meta: CalculatorMeta;
+  meta: Listing;
   order: number;
   fields: IndexField[];
 }
@@ -102,7 +102,11 @@ function field(text: string, base: number, keyword?: string): IndexField {
   return { text: norm, jamo: toJamo(norm), cho: toChoseong(norm), base, keyword };
 }
 
-export function buildIndex(list: CalculatorMeta[] = CALCULATORS): IndexEntry[] {
+/**
+ * 계산기와 게임을 한 색인에 담는다.
+ * "비행기"로 찾는 사람이 게임 탭까지 가지 않아도 된다.
+ */
+export function buildIndex(list: Listing[] = [...CALCULATORS, ...GAMES]): IndexEntry[] {
   return list.map((meta, order) => {
     const categoryLabel = CATEGORIES.find((c) => c.id === meta.category)?.label ?? '';
     const fields: IndexField[] = [
@@ -127,7 +131,7 @@ function positional(hay: string, needle: string, base: number): number {
 }
 
 export interface SearchHit {
-  meta: CalculatorMeta;
+  meta: Listing;
   score: number;
   /** 별칭 때문에 걸렸다면 그 별칭 — "복비"로 찾았을 때 이유를 보여준다 */
   via?: string;
@@ -171,8 +175,8 @@ export function search(rawQuery: string, index: IndexEntry[] = buildIndex()): Se
 
   return hits.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
-    // 점수가 같으면 실제로 쓸 수 있는 계산기를 먼저
-    const liveDiff = Number(b.meta.status === 'live') - Number(a.meta.status === 'live');
+    // 점수가 같으면 실제로 열 수 있는 것을 먼저
+    const liveDiff = Number(isOpenable(b.meta)) - Number(isOpenable(a.meta));
     if (liveDiff !== 0) return liveDiff;
     return a.meta.title.localeCompare(b.meta.title, 'ko');
   });

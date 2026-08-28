@@ -38,17 +38,22 @@ export const VERIFICATION = {
   bing: '',
 } as const;
 
-export type CategoryId = 'finance' | 'work' | 'realestate' | 'life';
+export type CategoryId = 'finance' | 'work' | 'realestate' | 'life' | 'game';
 
 export const CATEGORIES: { id: CategoryId; label: string; blurb: string }[] = [
   { id: 'finance', label: '금융', blurb: '대출·이자·투자' },
   { id: 'work', label: '직장', blurb: '급여·퇴직금·수당' },
   { id: 'realestate', label: '부동산', blurb: '취득세·중개보수' },
   { id: 'life', label: '생활', blurb: '날짜·단위·요금' },
+  { id: 'game', label: '게임', blurb: '직접 만든 웹게임' },
 ];
 
-export interface CalculatorMeta {
-  /** URL 경로 (선행 슬래시 없음) */
+/**
+ * 검색 색인이 필요로 하는 최소 형태.
+ * 계산기와 게임이 이것을 공유해서 한 번의 검색으로 둘 다 찾을 수 있다.
+ */
+export interface Searchable {
+  /** 목록에서 서로를 구분하는 식별자 */
   slug: string;
   /** 페이지 제목 겸 목록 제목 */
   title: string;
@@ -57,16 +62,33 @@ export interface CalculatorMeta {
   category: CategoryId;
   /** 목록과 meta description에 쓰이는 한 줄 설명 */
   summary: string;
-  status: 'live' | 'planned';
-  /** 세율·요율이 걸린 계산기는 기준 연도를 표시한다 */
-  basisYear?: number;
-  /** 이어서 계산할 만한 계산기 slug */
-  chain?: string[];
   /**
    * 검색 별칭 — 사람들이 실제로 치는 말을 넣는다.
    * 정식 명칭보다 별칭으로 찾는 경우가 훨씬 많다 ("중개보수"보다 "복비").
    */
   keywords?: string[];
+}
+
+export interface CalculatorMeta extends Searchable {
+  /** slug가 곧 URL 경로다 (선행 슬래시 없음) */
+  status: 'live' | 'planned';
+  /** 세율·요율이 걸린 계산기는 기준 연도를 표시한다 */
+  basisYear?: number;
+  /** 이어서 계산할 만한 계산기 slug */
+  chain?: string[];
+}
+
+/**
+ * 직접 만든 웹게임.
+ *
+ * 계산기와 같은 목록에 섞지 않는다. 다른 도메인에서 돌고,
+ * 세율 기준년도 체이닝도 없고, "계산기 N개" 집계에 들어가면 안 된다.
+ * 검색 색인만 Searchable 로 공유한다.
+ */
+export interface GameMeta extends Searchable {
+  category: 'game';
+  /** 게임이 사는 주소. 새 탭으로 열린다. */
+  url: string;
 }
 
 export const CALCULATORS: CalculatorMeta[] = [
@@ -221,6 +243,34 @@ export const findCalculator = (slug: string): CalculatorMeta | undefined =>
 
 export const calculatorsIn = (category: CategoryId): CalculatorMeta[] =>
   CALCULATORS.filter((c) => c.category === category);
+
+export const GAMES: GameMeta[] = [
+  {
+    slug: 'flying-airplane',
+    title: '떴다, 비행기',
+    short: '떴다, 비행기',
+    category: 'game',
+    summary:
+      '종이비행기를 접어 날립니다. 상승기류를 타고 골목을 넘어 얼마나 멀리 보내는지 겨루는 게임입니다.',
+    url: 'https://flying-airplane.onrender.com',
+    keywords: [
+      '비행기', '종이비행기', '떴다비행기', '떳다비행기',
+      '웹게임', '미니게임', '게임', '랭킹', '상승기류',
+    ],
+  },
+];
+
+export const gamesIn = (category: CategoryId): GameMeta[] =>
+  GAMES.filter((g) => g.category === category);
+
+/** 목록과 검색에 함께 섞여 나오는 것들 */
+export type Listing = CalculatorMeta | GameMeta;
+
+/** 검색 결과가 계산기인지 게임인지 가른다 — 열리는 방식이 다르다 */
+export const isGame = (item: Listing): item is GameMeta => 'url' in item;
+
+/** 열 수 있는가. 게임은 항상 열리고, 계산기는 다 만든 것만 열린다. */
+export const isOpenable = (item: Listing): boolean => isGame(item) || item.status === 'live';
 
 /** 체이닝 카드용 — 존재하지 않는 slug는 조용히 걸러낸다 */
 export const chainTargets = (meta: CalculatorMeta): CalculatorMeta[] =>

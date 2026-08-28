@@ -8,8 +8,17 @@
    */
   import { onMount } from 'svelte';
   import { buildIndex, search } from '../lib/search';
-  import { CATEGORIES, calculatorsIn, CALCULATORS } from '../lib/site';
+  import {
+    CATEGORIES,
+    calculatorsIn,
+    gamesIn,
+    CALCULATORS,
+    isGame,
+    isOpenable,
+    type CalculatorMeta,
+  } from '../lib/site';
   import CalculatorCard from '../components/CalculatorCard.svelte';
+  import GameCard from '../components/GameCard.svelte';
 
   const index = buildIndex();
 
@@ -34,12 +43,12 @@
   });
 
   /**
-   * 키보드 이동은 실제로 열 수 있는 계산기만 거친다.
+   * 키보드 이동은 실제로 열 수 있는 항목만 거친다.
    * 아직 안 만든 계산기에 선택이 멈추면 Enter를 눌러도 아무 일이 없어 고장으로 보인다.
    */
   const openable = $derived(
     hits.reduce<number[]>((acc, hit, i) => {
-      if (hit.meta.status === 'live') acc.push(i);
+      if (isOpenable(hit.meta)) acc.push(i);
       return acc;
     }, []),
   );
@@ -59,7 +68,14 @@
   function go() {
     const index = selected >= 0 ? selected : openable[0];
     const hit = index === undefined ? undefined : hits[index];
-    if (hit?.meta.status === 'live') location.href = `/${hit.meta.slug}`;
+    if (!hit) return;
+
+    // 게임은 다른 도메인이라 새 탭으로 보낸다 — 카드를 클릭했을 때와 같게
+    if (isGame(hit.meta)) {
+      window.open(hit.meta.url, '_blank', 'noopener');
+    } else if (hit.meta.status === 'live') {
+      location.href = `/${hit.meta.slug}`;
+    }
   }
 
   function onKeydown(event: KeyboardEvent) {
@@ -143,7 +159,16 @@
         </p>
         <div class="grid">
           {#each hits as hit, i (hit.meta.slug)}
-            <CalculatorCard meta={hit.meta} via={hit.via} selected={i === selected} />
+            {@const game = isGame(hit.meta) ? hit.meta : null}
+            {#if game}
+              <GameCard {game} via={hit.via} selected={i === selected} />
+            {:else}
+              <CalculatorCard
+                meta={hit.meta as CalculatorMeta}
+                via={hit.via}
+                selected={i === selected}
+              />
+            {/if}
           {/each}
         </div>
       </section>
@@ -163,13 +188,17 @@
   {:else}
     {#each CATEGORIES as category (category.id)}
       {@const items = calculatorsIn(category.id)}
-      {#if items.length}
+      {@const games = gamesIn(category.id)}
+      {#if items.length || games.length}
         <section class="block">
           <h2>{category.label}</h2>
           <p class="block-sub">{category.blurb}</p>
           <div class="grid">
             {#each items as item (item.slug)}
               <CalculatorCard meta={item} />
+            {/each}
+            {#each games as game (game.slug)}
+              <GameCard {game} />
             {/each}
           </div>
         </section>

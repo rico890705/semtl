@@ -1,0 +1,77 @@
+---
+import Base from '../../layouts/Base.astro';
+import GameCard from '../../components/GameCard.svelte';
+import { SITE, GAMES } from '../../lib/site';
+
+/**
+ * 계산기 사이트에 게임 탭이 있는 이유는 단순하다 — 같은 사람이 만들었기 때문이다.
+ * 계산기 목록과 섞지 않고 여기 모아둔다.
+ */
+const games = GAMES;
+---
+
+<Base
+  title="게임"
+  description={`${SITE.name}을 만든 사람이 함께 만든 웹게임입니다. 설치 없이 브라우저에서 바로 즐길 수 있습니다.`}
+  activeCategory="game"
+>
+  <main class="wrap">
+    <section class="head">
+      <nav class="crumb" aria-label="현재 위치">
+        <a href="/">계산기</a>
+        <span aria-hidden="true">›</span>
+        <span aria-current="page">게임</span>
+      </nav>
+      <h1>게임</h1>
+      <p class="lede">
+        계산기를 만들다 짬짬이 만든 웹게임입니다. 설치도 가입도 없이 브라우저에서 바로 열립니다.
+      </p>
+    </section>
+
+    <section class="block">
+      <div class="grid">
+        {games.map((g) => <GameCard game={g} />)}
+      </div>
+      <p class="note">
+        게임은 별도 주소에서 돌아가며 새 탭으로 열립니다.
+      </p>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .head {
+    padding: 32px 0 4px;
+  }
+
+  .crumb {
+    font-size: 13px;
+    color: var(--ink-3);
+    font-weight: 500;
+    display: flex;
+    gap: 7px;
+    margin-bottom: 14px;
+  }
+
+  .crumb a {
+    color: var(--ink-3);
+    text-decoration: none;
+  }
+
+  .crumb a:hover {
+    color: var(--accent-ink);
+    text-decoration: underline;
+  }
+
+  .grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  }
+
+  .note {
+    font-size: 12.5px;
+    color: var(--ink-3);
+    margin: 14px 0 0;
+  }
+</style>

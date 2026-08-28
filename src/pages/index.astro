@@ -4,6 +4,8 @@ import CalculatorSearch from '../islands/CalculatorSearch.svelte';
 import { SITE, CALCULATORS, liveCalculators } from '../lib/site';
 
 const live = liveCalculators();
+// 준비 중인 것이 없으면 "0개 준비 중"이라고 적지 않는다
+const planned = CALCULATORS.length - live.length;
 
 // 검색은 사이트 기능이므로 검색엔진에도 알려둔다
 const jsonLd = {
@@ -45,7 +47,7 @@ const jsonLd = {
         입력값은 서버로 전송되지 않습니다
       </span>
       <span class="badge">
-        계산기 {live.length}개 운영 중 · {CALCULATORS.length - live.length}개 준비 중
+        계산기 {live.length}개 운영 중{planned > 0 ? ` · ${planned}개 준비 중` : ''}
       </span>
     </div>
   </main>
