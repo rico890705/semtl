@@ -1,10 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
-import { SITE, CALCULATORS } from '../lib/site';
+import { SITE, CALCULATORS, liveCalculators } from '../lib/site';
 
-// 실제 공개 전에 확정해야 한다
-const contactEmail = 'CONTACT_EMAIL_TODO';
+const contactEmail = SITE.contactEmail;
 const planned = CALCULATORS.filter((c) => c.status === 'planned');
+const live = liveCalculators();
 ---
 
 <Base title="문의" description={`${SITE.name}에 문의하거나 만들었으면 하는 계산기를 제안해주세요.`}>
@@ -29,11 +29,27 @@ const planned = CALCULATORS.filter((c) => c.status === 'planned');
         <li>기대한 결과의 근거 (기관 안내 페이지나 고지서 등)</li>
       </ul>
 
-      <h2>준비 중인 계산기</h2>
-      <p>다음 계산기들을 만들고 있습니다. 더 급한 것이 있으면 알려주세요.</p>
-      <ul>
-        {planned.map((c) => <li>{c.title}</li>)}
-      </ul>
+      {
+        planned.length > 0 ? (
+          <Fragment>
+            <h2>준비 중인 계산기</h2>
+            <p>다음 계산기들을 만들고 있습니다. 더 급한 것이 있으면 알려주세요.</p>
+            <ul>
+              {planned.map((c) => (
+                <li>{c.title}</li>
+              ))}
+            </ul>
+          </Fragment>
+        ) : (
+          <Fragment>
+            <h2>어떤 계산기가 필요하세요</h2>
+            <p>
+              계획했던 계산기는 모두 만들었습니다. 지금 {live.length}개를 운영하고 있는데,
+              찾으시는 계산이 없다면 알려주세요. 실제로 쓸 사람이 있는 계산기부터 만듭니다.
+            </p>
+          </Fragment>
+        )
+      }
     </section>
   </main>
 </Base>

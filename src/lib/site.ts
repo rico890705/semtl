@@ -11,6 +11,12 @@ export const SITE = {
   description:
     '대출, 급여, 세금, 부동산 계산기를 한곳에서. 모든 계산은 브라우저에서 처리되며 입력값은 서버로 전송되지 않습니다.',
   locale: 'ko_KR',
+  /**
+   * 문의 메일.
+   * 개인정보처리방침과 문의 페이지에 노출된다. 애드센스 승인에도 연락처가 필요하다.
+   * 두 곳에 각각 적어두면 한쪽만 고치는 사고가 나므로 여기 한 곳에서만 관리한다.
+   */
+  contactEmail: 'maxyoonsp11@gmail.com',
   // 배포 도메인은 astro.config.mjs의 site가 유일한 출처다. 코드에서는 Astro.site로 읽는다.
 } as const;
 

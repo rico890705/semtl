@@ -119,7 +119,7 @@ src/
 - [ ] 배포 플랫폼의 Publish Directory가 `dist`인지
 - [ ] `astro.config.mjs`의 `site`가 실제 도메인인지
 - [ ] `public/robots.txt`의 사이트맵 주소
-- [ ] `src/pages/privacy.astro`와 `contact.astro`의 `CONTACT_EMAIL_TODO` 교체
+- [x] 문의 메일 — `src/lib/site.ts`의 `SITE.contactEmail`
 - [ ] 요율이 최신인지 각 `rates/` 파일의 `sources` 확인
 - [ ] 애드센스 승인 후 `.env`에 `PUBLIC_ADSENSE_CLIENT` 설정
 

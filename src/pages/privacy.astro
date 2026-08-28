@@ -2,9 +2,9 @@
 import Base from '../layouts/Base.astro';
 import { SITE } from '../lib/site';
 
-// 실제 공개 전에 시행일과 연락처를 확정해야 한다
+// 시행일은 방침을 실제로 고칠 때 함께 갱신한다
 const effectiveDate = '2026년 1월 1일';
-const contactEmail = 'CONTACT_EMAIL_TODO';
+const contactEmail = SITE.contactEmail;
 ---
 
 <Base
