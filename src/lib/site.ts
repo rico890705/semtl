@@ -14,6 +14,24 @@ export const SITE = {
   // 배포 도메인은 astro.config.mjs의 site가 유일한 출처다. 코드에서는 Astro.site로 읽는다.
 } as const;
 
+/**
+ * 검색엔진 소유확인 코드.
+ *
+ * 구글 서치콘솔·네이버 서치어드바이저에서 발급받은 값을 넣으면
+ * <head> 에 meta 태그로 나간다. 빈 문자열이면 태그를 내보내지 않는다.
+ *
+ * 파일 업로드 방식(google-xxxx.html)을 쓴다면 public/ 에 그대로 넣어도 된다.
+ * 다만 meta 태그 쪽이 파일이 흩어지지 않아 관리하기 낫다.
+ */
+export const VERIFICATION = {
+  /** google-site-verification */
+  google: '',
+  /** naver-site-verification */
+  naver: '',
+  /** msvalidate.01 (Bing) */
+  bing: '',
+} as const;
+
 export type CategoryId = 'finance' | 'labor' | 'realestate' | 'life';
 
 export const CATEGORIES: { id: CategoryId; label: string; blurb: string }[] = [

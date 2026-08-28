@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
-import { SITE, type CategoryId } from '../lib/site';
+import { SITE, VERIFICATION, type CategoryId } from '../lib/site';
 
 interface Props {
   title: string;
@@ -37,6 +37,13 @@ const pageTitle = title === SITE.name ? `${SITE.name} — ${SITE.tagline}` : `${
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary" />
+
+    {/* 검색엔진 소유확인 — 값이 있을 때만 내보낸다 */}
+    {VERIFICATION.google && (
+      <meta name="google-site-verification" content={VERIFICATION.google} />
+    )}
+    {VERIFICATION.naver && <meta name="naver-site-verification" content={VERIFICATION.naver} />}
+    {VERIFICATION.bing && <meta name="msvalidate.01" content={VERIFICATION.bing} />}
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta name="theme-color" content="#155e3c" media="(prefers-color-scheme: light)" />
