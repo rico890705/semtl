@@ -118,9 +118,15 @@ test('게임도 같은 검색창에서 찾을 수 있다', () => {
   // 게임 탭을 모르고 그냥 검색창에 치는 사람이 있다
   assert.equal(top('비행기'), 'flying-airplane');
   assert.equal(top('종이비행기'), 'flying-airplane');
-  assert.ok(slugs('게임').includes('flying-airplane'));
+  assert.equal(top('우봉고'), 'ubongo');
+  assert.ok(slugs('퍼즐').includes('ubongo'));
   // 흔한 오표기도 별칭으로 넣어둔다
   assert.ok(slugs('떳다비행기').includes('flying-airplane'));
+});
+
+test('게임으로 검색하면 게임이 다 나온다', () => {
+  const found = search('게임').filter((hit) => isGame(hit.meta)).map((hit) => hit.meta.slug);
+  assert.deepEqual(found.sort(), ['flying-airplane', 'ubongo']);
 });
 
 test('게임은 외부 주소를 가지고 항상 열 수 있다', () => {

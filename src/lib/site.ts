@@ -258,6 +258,19 @@ export const GAMES: GameMeta[] = [
       '웹게임', '미니게임', '게임', '랭킹', '상승기류',
     ],
   },
+  {
+    slug: 'ubongo',
+    title: '우봉고',
+    short: '우봉고',
+    category: 'game',
+    summary:
+      '조각을 돌리고 뒤집어 판을 빈틈없이 채웁니다. 시간 안에 푸느냐가 아니라 얼마나 빨리 푸느냐로 겨룹니다.',
+    url: 'https://ubongo-c2km.onrender.com',
+    keywords: [
+      '우봉고', '퍼즐', '폴리오미노', '도형퍼즐', '블록퍼즐', '조각맞추기',
+      '두뇌게임', '웹게임', '미니게임', '게임', '오늘의문제',
+    ],
+  },
 ];
 
 export const gamesIn = (category: CategoryId): GameMeta[] =>
