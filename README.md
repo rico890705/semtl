@@ -96,10 +96,29 @@ src/
 
 **결과를 링크로 공유합니다.** 계산 결과가 주소에 담겨 북마크하면 저장이고 보내면 공유입니다.
 
+## 배포
+
+정적 사이트이므로 빌드 결과인 `dist/`를 서빙하기만 하면 됩니다.
+
+| 설정 | 값 |
+|---|---|
+| Build Command | `npm run build` |
+| **Publish Directory** | **`dist`** |
+
+**Publish Directory를 반드시 `dist`로 지정해야 합니다.** 비워두면 저장소 루트가 서빙되어
+루트에 `index.html`이 없으므로 404가 뜨고, 대신 소스코드와 설정 파일이 웹에 그대로
+노출됩니다.
+
+도메인이 바뀌면 두 곳을 함께 고쳐야 합니다.
+
+- `astro.config.mjs`의 `site` — canonical URL과 사이트맵의 기준
+- `public/robots.txt`의 사이트맵 주소 — 하드코딩이라 자동으로 따라가지 않습니다
+
 ## 배포 전 확인
 
-- [ ] `astro.config.mjs`의 `site`를 실제 도메인으로 변경
-- [ ] `public/robots.txt`의 사이트맵 주소 변경
+- [ ] 배포 플랫폼의 Publish Directory가 `dist`인지
+- [ ] `astro.config.mjs`의 `site`가 실제 도메인인지
+- [ ] `public/robots.txt`의 사이트맵 주소
 - [ ] `src/pages/privacy.astro`와 `contact.astro`의 `CONTACT_EMAIL_TODO` 교체
 - [ ] 요율이 최신인지 각 `rates/` 파일의 `sources` 확인
 - [ ] 애드센스 승인 후 `.env`에 `PUBLIC_ADSENSE_CLIENT` 설정

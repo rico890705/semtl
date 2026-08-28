@@ -8,7 +8,7 @@ export default defineConfig({
    * 배포 도메인. sitemap.xml과 canonical URL의 기준이 된다.
    * 도메인이 정해지면 이 값만 바꾸면 된다 — 코드에서는 Astro.site로 참조한다.
    */
-  site: 'https://example.com',
+  site: 'https://semtl.onrender.com',
 
   integrations: [svelte(), sitemap()],
 
