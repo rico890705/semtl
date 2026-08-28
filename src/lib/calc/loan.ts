@@ -33,6 +33,12 @@ export interface LoanInput {
   annualRate: number;
   /** 대출 기간 (년) */
   years: number;
+  /**
+   * 기간을 개월로 직접 지정한다. 주면 years 대신 이 값을 쓴다.
+   * 자동차 할부처럼 30개월·42개월 같은 기간이 흔한 경우에 필요하다.
+   * years 만 쓰면 정수 년으로 반올림돼 30개월이 36개월이 되어버린다.
+   */
+  months?: number;
   method: RepaymentMethod;
   /** 거치기간 (개월). 이 기간에는 이자만 낸다. */
   graceMonths?: number;
@@ -76,8 +82,8 @@ const clampInt = (v: number, min: number, max: number) =>
  */
 export function buildSchedule(input: LoanInput): LoanResult {
   const principal = clampInt(input.principal, 0, 1_000_000_000_000);
-  const years = clampInt(input.years, 1, 50);
-  const months = years * 12;
+  const months =
+    input.months !== undefined ? clampInt(input.months, 1, 600) : clampInt(input.years, 1, 50) * 12;
   const graceMonths = clampInt(input.graceMonths ?? 0, 0, months - 1);
   const repayMonths = months - graceMonths;
   const annualRate = Number.isFinite(input.annualRate) ? Math.max(0, input.annualRate) : 0;

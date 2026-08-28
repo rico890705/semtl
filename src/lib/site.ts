@@ -162,6 +162,20 @@ export const CALCULATORS: CalculatorMeta[] = [
     keywords: ['복비', '중개수수료', '부동산수수료', '중개료', '복덕방', '중개보수', '전세복비', '월세복비'],
   },
   {
+    slug: 'car-loan',
+    title: '자동차 할부 계산기',
+    short: '자동차 할부',
+    category: 'finance',
+    summary: '차량 할부금과 취득세를 포함해 실제로 드는 총 비용을 계산합니다.',
+    status: 'live',
+    basisYear: 2026,
+    chain: ['loan', 'dsr'],
+    keywords: [
+      '자동차할부', '차할부', '할부금', '자동차취득세', '차량취득세',
+      '유예할부', '잔가보장', '신차', '차값', '자동차금융',
+    ],
+  },
+  {
     slug: 'savings',
     title: '예적금 이자 계산기',
     short: '예적금',

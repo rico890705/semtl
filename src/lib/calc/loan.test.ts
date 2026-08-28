@@ -124,3 +124,37 @@ test('극단값에서도 깨지지 않는다', () => {
   assert.equal(huge.totalPrincipal, 2_000_000_000);
   assert.equal(huge.schedule.at(-1)!.balance, 0);
 });
+
+test('기간을 개월로 직접 지정할 수 있다', () => {
+  // years 만 쓰면 정수 년으로 반올림돼 30개월이 36개월이 된다.
+  // 자동차 할부처럼 개월 단위 기간이 흔한 곳에서 필요하다.
+  const byMonths = buildSchedule({
+    principal: 20_000_000,
+    annualRate: 5,
+    years: 1,
+    months: 30,
+    method: 'equal-payment',
+  });
+  assert.equal(byMonths.months, 30);
+  assert.equal(byMonths.schedule.length, 30);
+  assert.equal(byMonths.totalPrincipal, 20_000_000);
+
+  // months 를 주면 years 는 무시된다
+  const ignoresYears = buildSchedule({
+    principal: 20_000_000,
+    annualRate: 5,
+    years: 30,
+    months: 30,
+    method: 'equal-payment',
+  });
+  assert.equal(ignoresYears.months, 30);
+
+  // months 를 안 주면 종전대로 years × 12
+  const byYears = buildSchedule({
+    principal: 20_000_000,
+    annualRate: 5,
+    years: 3,
+    method: 'equal-payment',
+  });
+  assert.equal(byYears.months, 36);
+});
