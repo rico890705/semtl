@@ -1,0 +1,78 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { SITE, type CategoryId } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  activeCategory?: CategoryId;
+  /** 검색 결과에 노출하지 않을 페이지 (개인정보처리방침 등) */
+  noindex?: boolean;
+}
+
+const { title, description, activeCategory, noindex = false } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const pageTitle = title === SITE.name ? `${SITE.name} — ${SITE.tagline}` : `${title} | ${SITE.name}`;
+---
+
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#155e3c" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c1311" media="(prefers-color-scheme: dark)" />
+
+    {/* TODO: 트래픽이 붙으면 서브셋 폰트를 self-host로 옮긴다 (외부 연결 제거 → LCP 개선) */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@500;600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
+    />
+    {/* 로고 전용. text= 로 SEMTL 다섯 글자만 받아 몇 KB로 끝낸다. */}
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&text=SEMTL&display=swap"
+    />
+
+    {/* 테마 깜빡임 방지 — 첫 페인트 전에 실행되어야 하므로 인라인 */}
+    <script is:inline>
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme');
+          if (saved === 'dark' || saved === 'light') {
+            document.documentElement.dataset.theme = saved;
+          }
+        } catch (e) {
+          /* 시크릿 모드 등에서 접근 불가 — 무시하고 OS 설정을 따른다 */
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <SiteHeader activeCategory={activeCategory} />
+    <slot />
+    <SiteFooter />
+  </body>
+</html>

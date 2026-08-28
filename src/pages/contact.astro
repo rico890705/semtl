@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, CALCULATORS } from '../lib/site';
+
+// 실제 공개 전에 확정해야 한다
+const contactEmail = 'CONTACT_EMAIL_TODO';
+const planned = CALCULATORS.filter((c) => c.status === 'planned');
+---
+
+<Base title="문의" description={`${SITE.name}에 문의하거나 만들었으면 하는 계산기를 제안해주세요.`}>
+  <main class="wrap page">
+    <h1>문의</h1>
+    <p class="lede">계산이 틀렸거나, 만들었으면 하는 계산기가 있으면 알려주세요.</p>
+
+    <section class="block prose">
+      <h2>이메일</h2>
+      <p>
+        <a href={`mailto:${contactEmail}`}>{contactEmail}</a>
+      </p>
+
+      <h2>계산이 틀린 것 같을 때</h2>
+      <p>
+        가장 도움이 되는 제보입니다. 아래 내용을 함께 보내주시면 빠르게 확인할 수 있습니다.
+      </p>
+      <ul>
+        <li>어떤 계산기인지</li>
+        <li>입력한 값 — 계산기 하단의 <strong>링크 복사</strong>를 누르면 입력값이 담긴 주소가 만들어집니다</li>
+        <li>기대한 결과와 실제로 나온 결과</li>
+        <li>기대한 결과의 근거 (기관 안내 페이지나 고지서 등)</li>
+      </ul>
+
+      <h2>준비 중인 계산기</h2>
+      <p>다음 계산기들을 만들고 있습니다. 더 급한 것이 있으면 알려주세요.</p>
+      <ul>
+        {planned.map((c) => <li>{c.title}</li>)}
+      </ul>
+    </section>
+  </main>
+</Base>
+
+<style>
+  .page {
+    padding: 32px 0 0;
+  }
+</style>

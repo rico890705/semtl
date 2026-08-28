@@ -1,0 +1,178 @@
+---
+import { SITE, CATEGORIES, type CategoryId } from '../lib/site';
+
+interface Props {
+  activeCategory?: CategoryId;
+}
+
+const { activeCategory } = Astro.props;
+---
+
+<header class="topbar">
+  <div class="wrap bar">
+    {/*
+      워드마크는 그림이 아니라 텍스트로 그린다.
+      어떤 해상도에서도 또렷하고, 다크 모드에서 초록이 테마를 따라 밝아진다.
+      원본 벡터 파일이 생기면 public/logo.svg 로 넣고 이 블록만 <img> 로 바꾸면 된다.
+    */}
+    <a class="brand" href="/" aria-label={`${SITE.name} 홈으로`}>
+      <span class="wordmark" aria-hidden="true">
+        <span class="sem">SEM</span><span class="tl">TL</span>
+      </span>
+    </a>
+
+    <nav class="topnav" aria-label="계산기 분류">
+      {
+        CATEGORIES.map((c) => (
+          <a href={`/${c.id}`} aria-current={activeCategory === c.id ? 'page' : undefined}>
+            {c.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <button type="button" class="theme" id="themeToggle" aria-label="밝은 화면과 어두운 화면 전환">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"
+        ></path>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<script>
+  const toggle = document.getElementById('themeToggle');
+  toggle?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const isDark =
+      root.dataset.theme === 'dark' ||
+      (!root.dataset.theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    const next = isDark ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      /* 저장 불가여도 이번 세션에는 적용된다 */
+    }
+  });
+</script>
+
+<style>
+  .topbar {
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    height: 58px;
+  }
+
+  .brand {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    flex: none;
+  }
+
+  /* ---------- 워드마크 ---------- */
+  .wordmark {
+    font-family: 'Archivo Black', var(--f-body);
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: -0.015em;
+    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+    /* 폰트가 오기 전에도 자리가 크게 흔들리지 않게 */
+    font-synthesis: none;
+  }
+
+  .sem {
+    color: var(--brand-orange);
+  }
+
+  .tl {
+    color: var(--accent);
+  }
+
+  @media (max-width: 640px) {
+    .wordmark {
+      font-size: 19px;
+    }
+  }
+
+  /* ---------- 네비게이션 ---------- */
+  .topnav {
+    display: flex;
+    gap: 22px;
+    margin-left: auto;
+  }
+
+  .topnav a {
+    color: var(--ink-2);
+    text-decoration: none;
+    font-size: 14.5px;
+    font-weight: 500;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
+  }
+
+  .topnav a:hover {
+    color: var(--ink);
+  }
+
+  .topnav a[aria-current='page'] {
+    color: var(--accent-ink);
+    border-bottom-color: var(--accent);
+  }
+
+  .theme {
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--ink-3);
+    border-radius: var(--radius-sm);
+    width: 34px;
+    height: 34px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    flex: none;
+  }
+
+  .theme:hover {
+    color: var(--ink);
+    border-color: var(--line-strong);
+  }
+
+  .theme svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  @media (max-width: 640px) {
+    .bar {
+      gap: 14px;
+    }
+
+    .topnav {
+      gap: 15px;
+      font-size: 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .topnav::-webkit-scrollbar {
+      display: none;
+    }
+  }
+</style>

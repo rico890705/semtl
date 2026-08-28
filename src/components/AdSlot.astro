@@ -1,0 +1,62 @@
+---
+/**
+ * 광고 자리.
+ *
+ * 원칙: 결과값 위에는 절대 넣지 않는다. 단기 RPM은 오르지만 재방문과 체류시간이 죽는다.
+ * 애드센스 승인 전까지는 자리만 잡아두고 비워둔다 (승인 전 코드 삽입은 심사에 불리).
+ */
+interface Props {
+  /** 어디에 놓인 슬롯인지 — 나중에 슬롯별 성과를 구분할 때 쓴다 */
+  placement: string;
+  label?: string;
+}
+
+const { placement, label = '광고' } = Astro.props;
+
+// 애드센스 승인 후 PUBLIC_ADSENSE_CLIENT 를 .env 에 넣으면 실제 광고가 나간다
+const client = import.meta.env.PUBLIC_ADSENSE_CLIENT;
+---
+
+{
+  client ? (
+    <ins
+      class="adsbygoogle adslot-live"
+      style="display:block"
+      data-ad-client={client}
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+      data-placement={placement}
+    />
+  ) : (
+    <div class="adslot" data-placement={placement} aria-hidden="true">
+      <span>{label} 자리 · {placement}</span>
+    </div>
+  )
+}
+
+<style>
+  .adslot {
+    margin: 28px 0;
+    border: 1px dashed var(--line-strong);
+    border-radius: 10px;
+    min-height: 92px;
+    display: grid;
+    place-items: center;
+    color: var(--ink-3);
+    font-size: 12.5px;
+    font-family: var(--f-mono);
+    text-align: center;
+    padding: 16px;
+    background: repeating-linear-gradient(
+      135deg,
+      transparent,
+      transparent 9px,
+      var(--surface-2) 9px,
+      var(--surface-2) 10px
+    );
+  }
+
+  .adslot-live {
+    margin: 28px 0;
+  }
+</style>

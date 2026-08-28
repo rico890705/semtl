@@ -1,0 +1,44 @@
+---
+/**
+ * 계산기 카드 목록. 분류 페이지와 계산기 하단 체이닝에서 쓴다.
+ *
+ * 체이닝이 특히 중요하다 — 한 번 계산한 사람은 대개 그 다음 질문이 있고,
+ * 그 질문을 미리 놓아두면 세션당 페이지뷰가 올라간다.
+ *
+ * CalculatorCard는 Svelte 컴포넌트지만 client 지시어 없이 쓰므로 JS는 나가지 않는다.
+ */
+import CalculatorCard from './CalculatorCard.svelte';
+import type { CalculatorMeta } from '../lib/site';
+
+interface Props {
+  targets: CalculatorMeta[];
+  /** 비워두면 제목 없이 카드만 나온다 (분류 페이지처럼 이미 제목이 있는 경우) */
+  heading?: string;
+  sub?: string;
+}
+
+const { targets, heading, sub } = Astro.props;
+---
+
+{
+  targets.length > 0 && (
+    <section class="block">
+      {heading && <h2>{heading}</h2>}
+      {sub && <p class="block-sub">{sub}</p>}
+
+      <div class="grid">
+        {targets.map((c) => (
+          <CalculatorCard meta={c} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .grid {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(215px, 1fr));
+  }
+</style>

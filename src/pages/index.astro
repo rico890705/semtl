@@ -1,0 +1,71 @@
+---
+import Base from '../layouts/Base.astro';
+import CalculatorSearch from '../islands/CalculatorSearch.svelte';
+import { SITE, CALCULATORS, liveCalculators } from '../lib/site';
+
+const live = liveCalculators();
+
+// 검색은 사이트 기능이므로 검색엔진에도 알려둔다
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  description: SITE.description,
+  url: Astro.site?.href,
+  inLanguage: 'ko-KR',
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: {
+      '@type': 'EntryPoint',
+      urlTemplate: `${Astro.site?.origin ?? ''}/?q={search_term_string}`,
+    },
+    'query-input': 'required name=search_term_string',
+  },
+};
+---
+
+<Base title={SITE.name} description={SITE.description}>
+  <main class="wrap">
+    <section class="hero">
+      <h1>{SITE.tagline}</h1>
+      <p class="lede">
+        대출·급여·세금·부동산 계산기를 한곳에 모았습니다. 계산 과정을 함께 보여주고, 결과는 링크로
+        공유할 수 있습니다.
+      </p>
+    </section>
+
+    {/* 검색창 + 계산기 목록. 질의가 없을 때는 전체 목록이 서버에서 렌더링된다. */}
+    <CalculatorSearch client:load />
+
+    <div class="badges foot-badges">
+      <span class="badge badge--trust">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        </svg>
+        입력값은 서버로 전송되지 않습니다
+      </span>
+      <span class="badge">
+        계산기 {live.length}개 운영 중 · {CALCULATORS.length - live.length}개 준비 중
+      </span>
+    </div>
+  </main>
+
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+</Base>
+
+<style>
+  .hero {
+    padding: 56px 0 0;
+    max-width: 60ch;
+  }
+
+  .foot-badges {
+    margin: 28px 0 8px;
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      padding: 34px 0 0;
+    }
+  }
+</style>

@@ -1,0 +1,286 @@
+@import './tokens.css';
+
+/* ---------- 리셋 ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+img,
+svg {
+  max-width: 100%;
+}
+
+/* ---------- 레이아웃 ---------- */
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- 타이포 ---------- */
+h1,
+h2,
+h3 {
+  font-family: var(--f-display);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+h1 {
+  font-size: clamp(30px, 5vw, 42px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 22px;
+}
+
+h3 {
+  font-size: 17px;
+}
+
+a {
+  color: var(--accent-ink);
+}
+
+.lede {
+  font-size: 16.5px;
+  color: var(--ink-2);
+  max-width: 60ch;
+  margin: 10px 0 0;
+}
+
+.num {
+  font-family: var(--f-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- 카드 ---------- */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.card-head {
+  padding: 16px 20px 0;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  margin: 0;
+}
+
+/* ---------- 배지 ---------- */
+.badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 500;
+  padding: 5px 11px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--ink-2);
+}
+
+.badge--trust {
+  border-color: var(--accent);
+  color: var(--accent-ink);
+  background: var(--accent-soft);
+}
+
+.badge svg {
+  width: 13px;
+  height: 13px;
+}
+
+/* ---------- 버튼 ---------- */
+.btn {
+  font-family: var(--f-body);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--accent-on);
+  white-space: nowrap;
+  transition: filter 0.13s;
+}
+
+.btn:hover {
+  filter: brightness(1.08);
+}
+
+.btn--ghost {
+  background: var(--surface);
+  border-color: var(--line-strong);
+  color: var(--ink-2);
+}
+
+/* ---------- 표 ---------- */
+.table-scroll {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--surface);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+  min-width: 560px;
+}
+
+thead th {
+  text-align: right;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink-3);
+  letter-spacing: 0.04em;
+  padding: 11px 16px;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+  background: var(--surface-2);
+}
+
+thead th:first-child {
+  text-align: left;
+}
+
+tbody td {
+  text-align: right;
+  padding: 9px 16px;
+  border-bottom: 1px solid var(--line);
+  font-family: var(--f-mono);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+tbody td:first-child {
+  text-align: left;
+  color: var(--ink-3);
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* ---------- 본문 콘텐츠 ---------- */
+.prose {
+  max-width: 65ch;
+}
+
+.prose h3 {
+  margin: 26px 0 7px;
+}
+
+.prose p,
+.prose ul {
+  font-size: 15px;
+  color: var(--ink-2);
+  margin: 0 0 13px;
+}
+
+.prose ul {
+  padding-left: 20px;
+}
+
+.prose li {
+  margin-bottom: 5px;
+}
+
+.prose strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.disclaimer {
+  border-left: 3px solid var(--line-strong);
+  padding: 2px 0 2px 15px;
+  font-size: 13.5px;
+  color: var(--ink-3);
+  margin: 22px 0 0;
+}
+
+/* ---------- 섹션 ---------- */
+.block {
+  margin: 36px 0;
+}
+
+.block-sub {
+  font-size: 14px;
+  color: var(--ink-3);
+  margin: 6px 0 16px;
+}
+
+/* ---------- 데이터 색 점 ---------- */
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex: none;
+  display: inline-block;
+}
+
+.dot--principal {
+  background: var(--principal);
+}
+
+.dot--interest {
+  background: var(--interest);
+}

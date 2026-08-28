@@ -1,0 +1,114 @@
+/**
+ * 디자인 토큰.
+ *
+ * 색은 세 갈래로 정의한다:
+ *   :root                                   → 라이트 (기본값)
+ *   @media dark + :root:not([data-theme=light]) → OS가 다크일 때
+ *   :root[data-theme="dark"]                → 사용자가 직접 다크를 고른 경우
+ * 컴포넌트는 절대 색 리터럴을 쓰지 않고 항상 이 변수만 참조한다.
+ */
+
+:root {
+  /* 표면 */
+  --ground: #f4f6f5;
+  --surface: #ffffff;
+  --surface-2: #eaefed;
+  --line: #dae2df;
+  --line-strong: #bfcbc7;
+
+  /* 글자 */
+  --ink: #0f1614;
+  --ink-2: #45534f;
+  --ink-3: #6e7c78;
+
+  /* 강조 — 딥 그린 */
+  --accent: #155e3c; /* rgb(21, 94, 60)    버튼·강조 */
+  --accent-ink: #0e472d; /* rgb(14, 71, 45)   링크·강조 텍스트 (흰 배경 대비 10.7:1) */
+  --accent-soft: #dff0e6; /* rgb(223, 240, 230) 선택 상태 배경 */
+  --accent-on: #ffffff; /* 강조 위에 얹는 글자 */
+  --focus: #1f8052; /* rgb(31, 128, 82)   포커스 링 */
+
+  /*
+   * 데이터 색 — 장식이 아니라 의미를 담는다.
+   *   principal  내가 갖는 것 (원금·실수령액·근로자 부담)
+   *   interest   나가는 것   (이자·공제·세금·사업주 부담)
+   * 비용 색은 주황이 아니라 붉은 쪽으로 당긴 벽돌색이다.
+   * 초록 옆에 주황을 두면 신호등처럼 읽혀 비율 막대가 소란해진다.
+   */
+  --principal: #155e3c; /* rgb(21, 94, 60) */
+  --interest: #9e4838; /* rgb(158, 72, 56) */
+  --interest-soft: #f6e8e4; /* rgb(246, 232, 228) */
+
+  /*
+   * 로고 전용 주황.
+   * 워드마크에서만 쓴다 — 데이터 색(principal/interest) 체계에 섞으면
+   * "나가는 돈"을 뜻하는 벽돌색과 혼동된다.
+   */
+  --brand-orange: #ed7622; /* rgb(237, 118, 34) */
+
+  --shadow: 0 1px 2px rgba(15, 22, 20, 0.05), 0 8px 24px -12px rgba(15, 22, 20, 0.18);
+
+  /* 서체 */
+  --f-display: 'Hahmlet', 'Nanum Myeongjo', serif;
+  --f-body: 'IBM Plex Sans KR', -apple-system, BlinkMacSystemFont, 'Malgun Gothic', sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+
+  /* 레이아웃 */
+  --wrap: 1080px;
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --ground: #0c1311;
+    --surface: #141d1a;
+    --surface-2: #1c2723;
+    --line: #263330;
+    --line-strong: #374641;
+
+    --ink: #e8efec;
+    --ink-2: #a5b3ae;
+    --ink-3: #7b8984;
+
+    --accent: #4ac282; /* rgb(74, 194, 130) */
+    --accent-ink: #76d8a2; /* rgb(118, 216, 162) */
+    --accent-soft: #0e2c1e; /* rgb(14, 44, 30) */
+    --accent-on: #061a11; /* rgb(6, 26, 17) */
+    --focus: #5cd191; /* rgb(92, 209, 145) */
+
+    --principal: #4ac282;
+    --interest: #e08a74; /* rgb(224, 138, 116) */
+    --interest-soft: #301e1a; /* rgb(48, 30, 26) */
+
+    --brand-orange: #f58c3e; /* rgb(245, 140, 62) */
+
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+  }
+}
+
+:root[data-theme='dark'] {
+  --ground: #0c1311;
+  --surface: #141d1a;
+  --surface-2: #1c2723;
+  --line: #263330;
+  --line-strong: #374641;
+
+  --ink: #e8efec;
+  --ink-2: #a5b3ae;
+  --ink-3: #7b8984;
+
+  --accent: #4ac282; /* rgb(74, 194, 130) */
+  --accent-ink: #76d8a2; /* rgb(118, 216, 162) */
+  --accent-soft: #0e2c1e; /* rgb(14, 44, 30) */
+  --accent-on: #061a11; /* rgb(6, 26, 17) */
+  --focus: #5cd191; /* rgb(92, 209, 145) */
+
+  --principal: #4ac282;
+  --interest: #e08a74; /* rgb(224, 138, 116) */
+  --interest-soft: #301e1a; /* rgb(48, 30, 26) */
+
+  --brand-orange: #f58c3e; /* rgb(245, 140, 62) */
+
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px -12px rgba(0, 0, 0, 0.6);
+}
