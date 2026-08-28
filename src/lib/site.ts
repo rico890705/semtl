@@ -38,11 +38,11 @@ export const VERIFICATION = {
   bing: '',
 } as const;
 
-export type CategoryId = 'finance' | 'labor' | 'realestate' | 'life';
+export type CategoryId = 'finance' | 'work' | 'realestate' | 'life';
 
 export const CATEGORIES: { id: CategoryId; label: string; blurb: string }[] = [
   { id: 'finance', label: '금융', blurb: '대출·이자·투자' },
-  { id: 'labor', label: '직장', blurb: '급여·퇴직금·수당' },
+  { id: 'work', label: '직장', blurb: '급여·퇴직금·수당' },
   { id: 'realestate', label: '부동산', blurb: '취득세·중개보수' },
   { id: 'life', label: '생활', blurb: '날짜·단위·요금' },
 ];
@@ -84,7 +84,7 @@ export const CALCULATORS: CalculatorMeta[] = [
     slug: 'salary',
     title: '연봉 실수령액 계산기',
     short: '실수령액',
-    category: 'labor',
+    category: 'work',
     summary: '연봉에서 4대보험과 소득세를 뺀 실제 수령액을 계산합니다.',
     status: 'live',
     basisYear: 2026,
@@ -95,7 +95,7 @@ export const CALCULATORS: CalculatorMeta[] = [
     slug: 'severance',
     title: '퇴직금 계산기',
     short: '퇴직금',
-    category: 'labor',
+    category: 'work',
     summary: '평균임금을 기준으로 퇴직금과 퇴직소득세를 계산합니다.',
     status: 'live',
     basisYear: 2026,
@@ -106,7 +106,7 @@ export const CALCULATORS: CalculatorMeta[] = [
     slug: 'insurance',
     title: '4대보험 계산기',
     short: '4대보험',
-    category: 'labor',
+    category: 'work',
     summary: '국민연금·건강보험·고용보험·산재보험을 근로자와 사업주가 각각 얼마씩 부담하는지 계산합니다.',
     status: 'live',
     basisYear: 2026,
